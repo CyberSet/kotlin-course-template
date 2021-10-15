@@ -15,8 +15,10 @@ fun alignText(
         var noSpaces = curLine.trim()
         while(noSpaces.contains("  ")) noSpaces = noSpaces.replace("  ", " ")
         while(noSpaces.length > lineWidth){
-            result += noSpaces.substring(0 until lineWidth) + '\n'
-            noSpaces = noSpaces.drop(lineWidth)
+            var lastSpace = noSpaces.substring(0 until lineWidth + 1).lastIndexOf(' ')
+            if (lastSpace == -1) lastSpace = lineWidth - 1
+            result += noSpaces.substring(0 until lastSpace + 1) + '\n'
+            noSpaces = noSpaces.drop(lastSpace + 1)
         }
         result += noSpaces + '\n'
     }
