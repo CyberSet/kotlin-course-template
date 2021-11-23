@@ -7,8 +7,8 @@ enum class Operation(
     val isWaitedToUnary: Boolean,
     val action: (Double, Double) -> Double
 ) {
-    OPENBRACKET("(", 0, true, { a, b -> 0.0 }),
-    CLOSEBRACKET(")", 0, false, { a, b -> 0.0 }),
+    OPENBRACKET("(", 0, true, { _, _ -> 0.0 }),
+    CLOSEBRACKET(")", 0, false, { _, _ -> 0.0 }),
     PLUS("+", 1, false, { a, b -> a + b }),
     MINUS("-", 1, false, { a, b -> b - a }),
     MULTIPLY("*", 2, true, { a, b -> a * b }),
@@ -30,12 +30,12 @@ fun getOperation(textValue: String): Operation {
 }
 
 fun parseToReversePolishNot(expression: String): String {
-    var polishNot: String = ""
-    var operationsStack: Stack<Operation> = Stack()
-    var tempDigit: String = ""
-    var tempOperation: String = ""
+    var polishNot = ""
+    val operationsStack: Stack<Operation> = Stack()
+    var tempDigit = ""
+    var tempOperation = ""
     var curOperation: Operation
-    var isAbleToUnary: Boolean = true
+    var isAbleToUnary = true
 
     for (curChar in expression) {
         if (!curChar.isWhitespace()) {
@@ -46,7 +46,7 @@ fun parseToReversePolishNot(expression: String): String {
             } else {
                 tempOperation = tempOperation.plus(curChar)
                 curOperation = getOperation(tempOperation)
-                if (tempDigit.isNotBlank()) polishNot = polishNot.plus(tempDigit + ' ')
+                if (tempDigit.isNotBlank()) polishNot = polishNot.plus("$tempDigit ")
                 tempDigit = ""
                 if (isAbleToUnary && (curOperation == Operation.PLUS || curOperation == Operation.MINUS)) {
                     if (curOperation == Operation.MINUS) polishNot = polishNot.plus("-1 ")
@@ -73,7 +73,7 @@ fun parseToReversePolishNot(expression: String): String {
             }
         }
     }
-    polishNot = polishNot.plus(tempDigit + ' ')
+    polishNot = polishNot.plus("$tempDigit ")
     while (operationsStack.isNotEmpty()) {
         polishNot = polishNot.plus(operationsStack.peek().textValue + ' ')
         operationsStack.pop()
@@ -82,26 +82,22 @@ fun parseToReversePolishNot(expression: String): String {
 }
 
 fun calculateReversePolishNot(expression: String): Double {
-    var digitStack: Stack<Double> = Stack()
-    var tempDigit: String = ""
-    var tempOperation: String = ""
+    val digitStack: Stack<Double> = Stack()
+    var tempString = ""
     var curOperation: Operation
 
     for (curChar in expression) {
         if (curChar.isWhitespace()) {
-            if (tempDigit.isNotBlank()) digitStack.push(tempDigit.toDouble())
-            tempDigit = ""
-        } else {
-            if (curChar.isDigit() || curChar == '.')
-                tempDigit = tempDigit.plus(curChar)
-            else {
-                tempOperation = tempOperation.plus(curChar)
-                curOperation = getOperation(tempOperation)
-                tempDigit = ""
+            if (tempString.toDoubleOrNull() != null) {
+                digitStack.push(tempString.toDouble())
+            } else {
+                curOperation = getOperation(tempString)
                 digitStack.push(curOperation.action(digitStack.pop(), digitStack.pop()))
             }
-            tempOperation = ""
-        }
+            tempString = ""
+        } else
+            tempString = tempString.plus(curChar)
     }
+    if(digitStack.size != 1) throw IllegalArgumentException("Operation order is not correct")
     return digitStack.peek()
 }
