@@ -36,17 +36,22 @@ fun parseToReversePolishNot(expression: String): String {
     var tempOperation = ""
     var curOperation: Operation
     var isAbleToUnary = true
+    var waitingForOperation = false
 
     for (curChar in expression) {
         if (!curChar.isWhitespace()) {
             if (curChar.isDigit() || curChar == '.') {
                 tempDigit = tempDigit.plus(curChar)
                 tempOperation = ""
+
                 isAbleToUnary = false
             } else {
                 tempOperation = tempOperation.plus(curChar)
                 curOperation = getOperation(tempOperation)
-                if (tempDigit.isNotBlank()) polishNot = polishNot.plus("$tempDigit ")
+                if (tempDigit.isNotBlank()) {
+                    polishNot = polishNot.plus("$tempDigit ")
+                    waitingForOperation = true
+                }
                 tempDigit = ""
                 if (isAbleToUnary && (curOperation == Operation.PLUS || curOperation == Operation.MINUS)) {
                     if (curOperation == Operation.MINUS) polishNot = polishNot.plus("-1 ")
@@ -59,9 +64,14 @@ fun parseToReversePolishNot(expression: String): String {
                             polishNot = polishNot.plus(operationsStack.peek().textValue + ' ')
                             operationsStack.pop()
                         }
-                        operationsStack.pop()
+                        if (operationsStack.isNotEmpty()) operationsStack.pop()
+                        else throw IllegalArgumentException("Operation order is not correct")
+                        waitingForOperation = true
                     } else {
+                        if(operationsStack.isEmpty() && !waitingForOperation) throw IllegalArgumentException("Operation order is not correct")
                         while (operationsStack.isNotEmpty() && curOperation != Operation.OPENBRACKET && operationsStack.peek().priorityValue >= curOperation.priorityValue) {
+                            if(!waitingForOperation) throw IllegalArgumentException("Operation order is not correct")
+                            waitingForOperation = false
                             polishNot = polishNot.plus(operationsStack.peek().textValue + ' ')
                             operationsStack.pop()
                         }
@@ -75,8 +85,9 @@ fun parseToReversePolishNot(expression: String): String {
     }
     polishNot = polishNot.plus("$tempDigit ")
     while (operationsStack.isNotEmpty()) {
-        polishNot = polishNot.plus(operationsStack.peek().textValue + ' ')
-        operationsStack.pop()
+        if (operationsStack.peek() == Operation.OPENBRACKET || operationsStack.peek() == Operation.CLOSEBRACKET)
+            throw IllegalArgumentException("Operation order is not correct")
+        polishNot = polishNot.plus(operationsStack.pop().textValue + ' ')
     }
     return polishNot
 }
@@ -98,6 +109,6 @@ fun calculateReversePolishNot(expression: String): Double {
         } else
             tempString = tempString.plus(curChar)
     }
-    if(digitStack.size != 1) throw IllegalArgumentException("Operation order is not correct")
+    if (digitStack.size != 1) throw IllegalArgumentException("Operation order is not correct")
     return digitStack.peek()
 }
