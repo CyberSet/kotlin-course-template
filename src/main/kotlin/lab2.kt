@@ -68,7 +68,7 @@ fun parseToReversePolishNot(expression: String): String {
                         else throw IllegalArgumentException("Operation order is not correct")
                         waitingForOperation = true
                     } else {
-                        if(operationsStack.isEmpty() && !waitingForOperation) throw IllegalArgumentException("Operation order is not correct")
+                        if(operationsStack.isEmpty() && !waitingForOperation && curOperation != Operation.OPENBRACKET) throw IllegalArgumentException("Operation order is not correct")
                         while (operationsStack.isNotEmpty() && curOperation != Operation.OPENBRACKET && operationsStack.peek().priorityValue >= curOperation.priorityValue) {
                             if(!waitingForOperation) throw IllegalArgumentException("Operation order is not correct")
                             waitingForOperation = false
