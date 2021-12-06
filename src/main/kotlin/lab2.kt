@@ -1,11 +1,11 @@
 import java.util.*
 import kotlin.math.pow
 
-enum class Operation(
-    internal val textValue: String,
-    internal val priorityValue: Int,
-    internal val isWaitedToUnary: Boolean,
-    internal val action: (Double, Double) -> Double
+private enum class Operation(
+    val textValue: String,
+    val priorityValue: Int,
+    val isWaitedToUnary: Boolean,
+    val action: (Double, Double) -> Double
 ) {
     OPENBRACKET("(", 0, true, { _, _ -> 0.0 }),
     CLOSEBRACKET(")", 0, false, { _, _ -> 0.0 }),
@@ -29,7 +29,7 @@ private fun getOperation(textValue: String): Operation {
     }
 }
 
-internal fun parseToReversePolishNot(expression: String): String {
+fun parseToReversePolishNot(expression: String): String {
     var polishNot = ""
     val operationsStack: Stack<Operation> = Stack()
     var tempDigit = ""
@@ -92,7 +92,7 @@ internal fun parseToReversePolishNot(expression: String): String {
     return polishNot
 }
 
-internal fun calculateReversePolishNot(expression: String): Double {
+fun calculateReversePolishNot(expression: String): Double {
     val digitStack: Stack<Double> = Stack()
     var tempString = ""
     var curOperation: Operation
