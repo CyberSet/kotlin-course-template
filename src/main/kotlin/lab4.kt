@@ -2,20 +2,21 @@ class Matrix(
     inputValues: Array<Array<Double>>
 ) {
     private var values: Array<Array<Double>> = emptyArray()
-    private val rows: Int
-    private var columns: Int
+    val rows: Int
+        get() = values.size
+    val columns: Int
+        get() = values[0].size
 
     init {
-        rows = inputValues.size
-        columns = inputValues[0].size
-        if (rows == 0 || columns == 0) throw IllegalArgumentException("Incorrect input values")
+        if (inputValues.isEmpty() || inputValues[0].isEmpty()) throw IllegalArgumentException("Incorrect input values")
         for (curLine in inputValues)
-            if (curLine.size != columns) throw IllegalArgumentException("Incorrect input values")
-        values = inputValues
+            if (curLine.size != inputValues[0].size) throw IllegalArgumentException("Incorrect input values")
+        values = Array(inputValues.size) { Array(inputValues[0].size) { 0.0 } }
+        for (i in 0 until rows) for (j in 0 until  columns) values[i][j] = inputValues[i][j]
     }
 
     operator fun plus(other: Matrix): Matrix {
-        if (getRowsCount() != other.getRowsCount() || getColumnCount() != other.getColumnCount())
+        if (rows != other.rows || columns != other.columns)
             throw IllegalArgumentException("Matrices have different dimensions")
         val result: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
         for (i in 0 until rows) for (j in 0 until columns) result[i][j] = values[i][j] + other[i, j]
@@ -23,13 +24,13 @@ class Matrix(
     }
 
     operator fun plusAssign(other: Matrix) {
-        if (getRowsCount() != other.getRowsCount() || getColumnCount() != other.getColumnCount())
+        if (rows != other.rows || columns != other.columns)
             throw IllegalArgumentException("Matrices have different dimensions")
         for (i in 0 until rows) for (j in 0 until columns) values[i][j] = values[i][j] + other[i, j]
     }
 
     operator fun minus(other: Matrix): Matrix {
-        if (getRowsCount() != other.getRowsCount() || getColumnCount() != other.getColumnCount())
+        if (rows != other.rows || columns != other.columns)
             throw IllegalArgumentException("Matrices have different dimensions")
         val result: Array<Array<Double>> = Array(rows) { Array(columns) { 0.0 } }
         for (i in 0 until rows) for (j in 0 until columns) result[i][j] = values[i][j] - other[i, j]
@@ -37,17 +38,17 @@ class Matrix(
     }
 
     operator fun minusAssign(other: Matrix) {
-        if (getRowsCount() != other.getRowsCount() || getColumnCount() != other.getColumnCount())
+        if (rows != other.rows || columns != other.columns)
             throw IllegalArgumentException("Matrices have different dimensions")
         for (i in 0 until rows) for (j in 0 until columns) values[i][j] = values[i][j] - other[i, j]
     }
 
     operator fun times(other: Matrix): Matrix {
-        if (getColumnCount() != other.getRowsCount())
+        if (columns != other.rows)
             throw IllegalArgumentException("The dimension of the matrices is not suitable for multiplication")
-        val result: Array<Array<Double>> = Array(rows) { Array(other.getColumnCount()) { 0.0 } }
+        val result: Array<Array<Double>> = Array(rows) { Array(other.columns) { 0.0 } }
         var tempDigit: Double
-        for (i in 0 until result.size)
+        for (i in result.indices)
             for (j in 0 until result[0].size) {
                 tempDigit = 0.0
                 for (k in 0 until columns) tempDigit += values[i][k] * other[k, j]
@@ -57,17 +58,16 @@ class Matrix(
     }
 
     operator fun timesAssign(other: Matrix) {
-        if (getColumnCount() != other.getRowsCount())
+        if (columns != other.rows)
             throw IllegalArgumentException("The dimension of the matrices is not suitable for multiplication")
-        val result: Array<Array<Double>> = Array(rows) { Array(other.getColumnCount()) { 0.0 } }
+        val result: Array<Array<Double>> = Array(rows) { Array(other.columns) { 0.0 } }
         var tempDigit: Double
-        for (i in 0 until result.size)
+        for (i in result.indices)
             for (j in 0 until result[0].size) {
                 tempDigit = 0.0
                 for (k in 0 until columns) tempDigit += values[i][k] + other[k, j]
                 result[i][j] = tempDigit
             }
-        columns = other.getColumnCount()
         values = result
     }
 
@@ -113,14 +113,6 @@ class Matrix(
         return this
     }
 
-    fun getRowsCount(): Int {
-        return rows
-    }
-
-    fun getColumnCount(): Int {
-        return columns
-    }
-
     override fun toString(): String {
         var output = ""
         for (i in values.indices) {
@@ -132,11 +124,17 @@ class Matrix(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Matrix || rows != other.getRowsCount() || columns != other.getColumnCount())
+        if (other !is Matrix || rows != other.rows || columns != other.columns)
             return false
         for (i in 0 until rows)
             for (j in 0 until columns)
                 if (values[i][j] != other[i, j]) return false
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = values.contentDeepHashCode()
+        result = 31 * result + values.contentDeepHashCode()
+        return result
     }
 }
