@@ -133,8 +133,7 @@ class Matrix(
     }
 
     override fun hashCode(): Int {
-        var result = values.contentDeepHashCode()
-        result = 31 * result + values.contentDeepHashCode()
-        return result
+
+        return values.contentDeepHashCode()
     }
 }
