@@ -1,66 +1,24 @@
 fun main() {
-    val matrixA = Matrix(arrayOf(arrayOf(1.0, -3.0, 1.0), arrayOf(5.0, 4.0, -2.0)))
-    val matrixB = Matrix(arrayOf(arrayOf(-7.0, 5.0), arrayOf(2.0, -1.0), arrayOf(4.0, 3.0)))
-    val matrixC = Matrix(arrayOf(arrayOf(2.0, -3.0, 1.0), arrayOf(5.0, 4.0, -2.0)))
+    val shapeFactory = ShapeFactorImpl()
+    val shapeList: MutableList<Shape> = arrayListOf()
+    shapeList.add(shapeFactory.createCircle(4.0))
+    shapeList.add(shapeFactory.createRandomCircle())
 
-    //Просмотр значений элемента
-    println(matrixA[0,0])
+    shapeList.add(shapeFactory.createSquare(4.0))
+    shapeList.add(shapeFactory.createRandomSquare())
 
-    //Изменение элемента
-    matrixA[0,0] = 2.0
-    println(matrixA[0,0])
+    shapeList.add(shapeFactory.createRectangle(4.0, 8.0))
+    shapeList.add(shapeFactory.createRandomRectangle())
 
-    //Просмотр размерностей матрицы
-    println(matrixA.getRowsCount().toString() + " " + matrixA.getColumnCount().toString())
+    shapeList.add(shapeFactory.createTriangle(3.0, 4.0, 5.0))
+    shapeList.add(shapeFactory.createRandomTriangle())
 
-    //Сложение
-    var result = matrixA + matrixC
-    println(result.toString())
+    shapeList.add(shapeFactory.createRandomShape())
 
-    //Вычитание
-    result = matrixA - matrixC
-    println(result.toString())
-
-    //Умножение
-    result = matrixA * matrixB
-    println(result.toString())
-
-    //Модифицирующее сложение
-    matrixA += matrixC
-    println(matrixA.toString())
-
-    //Модифицирующее вычитание
-    matrixA -= matrixC
-    println(matrixA.toString())
-
-    //Модифицирующее умножение
-    matrixA *= matrixB
-    println(matrixA.toString())
-
-    //Умножение на скаляр
-    result = matrixA * 2.0
-    println(result.toString())
-
-    //Деление на скаляр
-    result = matrixA / 2.0
-    println(result.toString())
-
-    //Модифицируюшее умножение на скаляр
-    matrixA *= 2.0
-    println(matrixA.toString())
-
-    //Деление на скаляр
-    matrixA /= 2.0
-    println(matrixA.toString())
-
-    //Унарный минус
-    println((-matrixA).toString())
-
-    //Унарный плюс
-    println((+matrixA).toString())
-
-    //Сравнение
-    println(matrixA == matrixC)
-    val matrixD = Matrix(arrayOf(arrayOf(2.0, -3.0, 1.0), arrayOf(5.0, 4.0, -2.0)))
-    println(matrixD == matrixC)
+    println(calcTotalArea(shapeList))
+    println(calcTotalPerimeter(shapeList))
+    println(searchMaxAreaShape(shapeList)?.javaClass?.typeName)
+    println(searchMinAreaShape(shapeList)?.javaClass?.typeName)
+    println(searchMaxPerimeterShape(shapeList)?.javaClass?.typeName)
+    println(searchMinPerimeterShape(shapeList)?.javaClass?.typeName)
 }
