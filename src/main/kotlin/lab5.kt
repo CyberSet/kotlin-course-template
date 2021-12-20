@@ -1,8 +1,8 @@
 import java.time.Year
 
-class Book(val name: String, val author: Author, val genre: Genre, val year: Year)
-class Author(val name: String)
-class User(val name: String)
+data class Book(val name: String, val author: Author, val genre: Genre, val year: Year)
+data class Author(val name: String)
+data class User(val name: String)
 
 enum class Genre {
     ADVENTURE,
@@ -58,7 +58,7 @@ class Library(
     }
 
     override fun getAllBooks(): List<Book> {
-        return bookList
+        return bookList.toList()
     }
 
     override fun getAllAvailableBooks(): List<Book> {
@@ -67,12 +67,12 @@ class Library(
 
     override fun getBookStatus(book: Book): Status {
         if (book !in bookList)
-            throw IllegalArgumentException("This book not in library")
+            throw IllegalArgumentException("This book not in library") //Вместо всех ошибок кидать ноль? Или только эту
         return bookStatuses[book]!!
     }
 
     override fun getAllBookStatuses(): Map<Book, Status> {
-        return bookStatuses
+        return bookStatuses.toMap()
     }
 
     override fun setBookStatus(book: Book, status: Status) {
