@@ -5,10 +5,14 @@ interface Shape {
     fun calcPerimeter(): Double
 }
 
-class Circle(private val radius: Double) : Shape {
+class Circle(val radius: Double) : Shape {
     init {
         if (radius <= 0)
             throw IllegalArgumentException("Illegal radius")
+    }
+
+    override fun toString(): String {
+        return "Circle"
     }
 
     override fun calcArea(): Double {
@@ -21,10 +25,14 @@ class Circle(private val radius: Double) : Shape {
 
 }
 
-class Square(private val a: Double) : Shape {
+class Square(val a: Double) : Shape {
     init {
         if (a <= 0)
             throw IllegalArgumentException("Illegal side")
+    }
+
+    override fun toString(): String {
+        return "Square"
     }
 
     override fun calcArea(): Double {
@@ -36,10 +44,14 @@ class Square(private val a: Double) : Shape {
     }
 }
 
-class Rectangle(private val a: Double, private val b: Double) : Shape {
+class Rectangle(val a: Double, private val b: Double) : Shape {
     init {
         if (a <= 0 || b <= 0)
             throw IllegalArgumentException("Illegal side")
+    }
+
+    override fun toString(): String {
+        return "Rectangle"
     }
 
     override fun calcArea(): Double {
@@ -51,10 +63,14 @@ class Rectangle(private val a: Double, private val b: Double) : Shape {
     }
 }
 
-class Triangle(private val a: Double, private val b: Double, private val c: Double) : Shape {
+class Triangle(val a: Double, val b: Double, val c: Double) : Shape {
     init {
         if (a + b <= c || a + c <= b || b + c <= a || a <= 0 || b <= 0 || c <= 0)
             throw IllegalArgumentException("Illegal sides")
+    }
+
+    override fun toString(): String {
+        return "Triangle"
     }
 
     override fun calcArea(): Double {
@@ -127,7 +143,7 @@ class ShapeFactorImpl : ShapeFactory {
             1 -> createRandomSquare()
             2 -> createRandomRectangle()
             3 -> createRandomTriangle()
-            else -> throw Exception("Error")
+            else -> throw IllegalStateException("Error")
         }
     }
 

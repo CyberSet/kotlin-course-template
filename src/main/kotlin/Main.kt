@@ -17,8 +17,8 @@ fun main() {
 
     println(calcTotalArea(shapeList))
     println(calcTotalPerimeter(shapeList))
-    println(searchMaxAreaShape(shapeList)?.javaClass?.typeName)
-    println(searchMinAreaShape(shapeList)?.javaClass?.typeName)
-    println(searchMaxPerimeterShape(shapeList)?.javaClass?.typeName)
-    println(searchMinPerimeterShape(shapeList)?.javaClass?.typeName)
+    println(searchMaxAreaShape(shapeList)?.toString())
+    println(searchMinAreaShape(shapeList)?.toString())
+    println(searchMaxPerimeterShape(shapeList)?.toString())
+    println(searchMinPerimeterShape(shapeList)?.toString())
 }
