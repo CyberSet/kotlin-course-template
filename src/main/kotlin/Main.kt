@@ -1,24 +1,35 @@
 fun main() {
     val shapeFactory = ShapeFactorImpl()
-    val shapeList: MutableList<Shape> = arrayListOf()
-    shapeList.add(shapeFactory.createCircle(4.0))
-    shapeList.add(shapeFactory.createRandomCircle())
+    val shapeCollector = ShapeCollector<Shape>()
+    val circleCollector = ShapeCollector<Circle>()
+    shapeCollector.add(shapeFactory.createSquare(2.0))
+    shapeCollector.add(shapeFactory.createCircle(3.0))
+    shapeCollector.add(shapeFactory.createRectangle(4.0, 5.0))
+    shapeCollector.add(shapeFactory.createTriangle(6.0, 7.0, 8.0))
 
-    shapeList.add(shapeFactory.createSquare(4.0))
-    shapeList.add(shapeFactory.createRandomSquare())
+    circleCollector.add(shapeFactory.createCircle(2.0))
+    circleCollector.add(shapeFactory.createCircle(3.0))
+    circleCollector.add(shapeFactory.createCircle(4.0))
 
-    shapeList.add(shapeFactory.createRectangle(4.0, 8.0))
-    shapeList.add(shapeFactory.createRandomRectangle())
+    for (i in shapeCollector.getAllSorted(ShapeComparator.perimeterComparatorAsc))
+        println(i.toString() + " " + i.calcPerimeter())
 
-    shapeList.add(shapeFactory.createTriangle(3.0, 4.0, 5.0))
-    shapeList.add(shapeFactory.createRandomTriangle())
+    for (i in shapeCollector.getAllSorted(ShapeComparator.perimeterComparatorDesc))
+        println(i.toString() + " " + i.calcPerimeter())
 
-    shapeList.add(shapeFactory.createRandomShape())
+    for (i in shapeCollector.getAllSorted(ShapeComparator.areaComparatorAsc))
+        println(i.toString() + " " + i.calcArea())
 
-    println(calcTotalArea(shapeList))
-    println(calcTotalPerimeter(shapeList))
-    println(searchMaxAreaShape(shapeList)?.toString())
-    println(searchMinAreaShape(shapeList)?.toString())
-    println(searchMaxPerimeterShape(shapeList)?.toString())
-    println(searchMinPerimeterShape(shapeList)?.toString())
+    for (i in shapeCollector.getAllSorted(ShapeComparator.areaComparatorDesc))
+        println(i.toString() + " " + i.calcArea())
+
+    for (i in circleCollector.getAllSorted(ShapeComparator.radiusComparatorAsc))
+        println(i.toString() + " " + i.radius)
+
+    for (i in circleCollector.getAllSorted(ShapeComparator.radiusComparatorDesc))
+        println(i.toString() + " " + i.radius)
+
+    for (i in shapeCollector.getAllByClass(Rectangle::class.java))
+        println(i.toString() + " " + i.calcPerimeter())
+
 }
