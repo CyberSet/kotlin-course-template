@@ -29,7 +29,7 @@ interface LibraryService {
     fun getAllBooks(): List<Book>
     fun getAllAvailableBooks(): List<Book>
 
-    fun getBookStatus(book: Book): Status
+    fun getBookStatus(book: Book): Status?
     fun getAllBookStatuses(): Map<Book, Status>
 
     fun setBookStatus(book: Book, status: Status)
@@ -65,10 +65,8 @@ class Library(
         return bookList.filter { book -> bookStatuses[book] == Status.Available }
     }
 
-    override fun getBookStatus(book: Book): Status {
-        if (book !in bookList)
-            throw IllegalArgumentException("This book not in library") //Вместо всех ошибок кидать ноль? Или только эту
-        return bookStatuses[book]!!
+    override fun getBookStatus(book: Book): Status? {
+        return bookStatuses[book]
     }
 
     override fun getAllBookStatuses(): Map<Book, Status> {

@@ -153,20 +153,6 @@ internal class Lab5Test {
     }
 
     @Test
-    fun testGetBookStatusBookError() {
-        val lib = Library()
-        var result: Exception? = null
-        val book =
-            Book("Девушка с татуировкой дракона", Author("Стиг Ларссон"), Genre.DETECTIVE, Year.parse("2005"))
-        try {
-            lib.getBookStatus(book)
-        } catch (e: Exception) {
-            result = e
-        }
-        assertNotNull(result)
-    }
-
-    @Test
     fun testSetBookStatusCorrect() {
         val lib = Library()
         val book1 =
