@@ -5,7 +5,7 @@ class ShapeCollector<T : Shape> {
         allShapes.add(new)
     }
 
-    fun addAll(new: MutableList<T>) {
+    fun addAll(new: Collection<T>) {
         allShapes.addAll(new)
     }
 

@@ -9,7 +9,9 @@ fun main() {
 
     circleCollector.add(shapeFactory.createCircle(2.0))
     circleCollector.add(shapeFactory.createCircle(3.0))
-    circleCollector.add(shapeFactory.createCircle(4.0))
+    circleCollector.addAll(listOf( shapeFactory.createCircle(4.0),shapeFactory.createCircle(5.0)))
+
+    println(circleCollector.getAll())
 
     for (i in shapeCollector.getAllSorted(ShapeComparator.perimeterComparatorAsc))
         println(i.toString() + " " + i.calcPerimeter())
