@@ -34,4 +34,11 @@ fun main() {
     for (i in shapeCollector.getAllByClass(Rectangle::class.java))
         println(i.toString() + " " + i.calcPerimeter())
 
+    val filePath = "new.json"
+
+    val tools = shapeTool()
+    val encodeString = tools.encode(shapeCollector.getAll()[0])
+
+    val decodedShape = tools.decode(encodeString)
+    tools.writeToFile(decodedShape.toString(), filePath)
 }

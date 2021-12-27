@@ -1,10 +1,16 @@
-import kotlin.math.*
+
+import kotlinx.serialization.Serializable
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 
 interface Shape {
     fun calcArea(): Double
     fun calcPerimeter(): Double
 }
 
+@Serializable
 class Circle(val radius: Double) : Shape {
     init {
         if (radius <= 0)
@@ -25,6 +31,7 @@ class Circle(val radius: Double) : Shape {
 
 }
 
+@Serializable
 class Square(val a: Double) : Shape {
     init {
         if (a <= 0)
@@ -44,7 +51,8 @@ class Square(val a: Double) : Shape {
     }
 }
 
-class Rectangle(val a: Double, private val b: Double) : Shape {
+@Serializable
+class Rectangle(val a: Double, val b: Double) : Shape {
     init {
         if (a <= 0 || b <= 0)
             throw IllegalArgumentException("Illegal side")
@@ -63,6 +71,7 @@ class Rectangle(val a: Double, private val b: Double) : Shape {
     }
 }
 
+@Serializable
 class Triangle(val a: Double, val b: Double, val c: Double) : Shape {
     init {
         if (a + b <= c || a + c <= b || b + c <= a || a <= 0 || b <= 0 || c <= 0)
