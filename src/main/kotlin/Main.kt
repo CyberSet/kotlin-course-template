@@ -37,8 +37,11 @@ fun main() {
     val filePath = "new.json"
 
     val tools = shapeTool()
-    val encodeString = tools.encode(shapeCollector.getAll()[0])
+    tools.writeToFile(tools.encode(shapeCollector.getAll()), filePath)
+    val shapeList = tools.decode(tools.readFromFile(filePath)).toMutableList()
+    shapeList.add(shapeFactory.createCircle(12.0))
+    shapeList.add(shapeFactory.createSquare(33.0))
 
-    val decodedShape = tools.decode(encodeString)
-    tools.writeToFile(decodedShape.toString(), filePath)
+    val encodeString = tools.encode(shapeList)
+    tools.writeToFile(encodeString, filePath)
 }

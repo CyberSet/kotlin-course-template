@@ -20,11 +20,11 @@ class shapeTool {
         }
     }
 
-    fun encode(data: Shape): String {
+    fun encode(data: Collection<Shape>): String {
         return json.encodeToString(data)
     }
 
-    fun decode(data: String): Shape {
+    fun decode(data: String): Collection<Shape> {
         return json.decodeFromString(data)
     }
 
